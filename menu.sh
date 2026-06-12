@@ -6,7 +6,7 @@
 SCRIPT_DIR="/etc/vpn-script"
 source "$SCRIPT_DIR/lib.sh"
 
-LINE="━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+LINE="━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 
 show_header() {
   clear
@@ -58,36 +58,40 @@ main_menu() {
   echo ""
   echo -e "  ${WHITE}MAIN MENU${NC}"
   echo -e "${CYAN}$LINE${NC}"
-  echo -e "  ${YELLOW}[1]${NC}  VMess WebSocket"
+  echo -e "  ${YELLOW}[1]${NC}  SSH / Port Configuration"
+  echo -e "       ${DIM}OpenSSH, Dropbear, SSH WS, SSH SSL WS${NC}"
+  echo -e "${CYAN}$LINE${NC}"
+  echo -e "  ${YELLOW}[2]${NC}  VMess WebSocket"
   echo -e "       ${DIM}WS TLS & non-TLS Management${NC}"
   echo -e "${CYAN}$LINE${NC}"
-  echo -e "  ${YELLOW}[2]${NC}  VLess WebSocket"
+  echo -e "  ${YELLOW}[3]${NC}  VLess WebSocket"
   echo -e "       ${DIM}WS TLS & non-TLS Management${NC}"
   echo -e "${CYAN}$LINE${NC}"
-  echo -e "  ${YELLOW}[3]${NC}  Nginx Management"
+  echo -e "  ${YELLOW}[4]${NC}  Nginx Management"
   echo -e "${CYAN}$LINE${NC}"
-  echo -e "  ${YELLOW}[4]${NC}  Dropbear SSH Management"
+  echo -e "  ${YELLOW}[5]${NC}  Dropbear SSH Management"
   echo -e "${CYAN}$LINE${NC}"
-  echo -e "  ${YELLOW}[5]${NC}  System Information"
+  echo -e "  ${YELLOW}[6]${NC}  System Information"
   echo -e "${CYAN}$LINE${NC}"
-  echo -e "  ${YELLOW}[6]${NC}  Change Domain"
+  echo -e "  ${YELLOW}[7]${NC}  Change Domain"
   echo -e "${CYAN}$LINE${NC}"
-  echo -e "  ${RED}[7]${NC}  Uninstall Script"
+  echo -e "  ${RED}[8]${NC}  Uninstall Script"
   echo -e "${CYAN}$LINE${NC}"
   echo -e "  ${DIM}[0]${NC}  Exit"
   echo -e "${CYAN}$LINE${NC}"
   echo ""
-  echo -ne "  ${WHITE}Pilih menu [0-7]${NC}: "
+  echo -ne "  ${WHITE}Pilih menu [0-8]${NC}: "
   read -r choice
 
   case "$choice" in
-    1) bash $SCRIPT_DIR/menu/vmess.sh ;;
-    2) bash $SCRIPT_DIR/menu/vless.sh ;;
-    3) bash $SCRIPT_DIR/menu/nginx.sh ;;
-    4) bash $SCRIPT_DIR/menu/dropbear.sh ;;
-    5) bash $SCRIPT_DIR/menu/sysinfo.sh ;;
-    6) bash $SCRIPT_DIR/menu/changedomain.sh ;;
-    7) bash $SCRIPT_DIR/menu/uninstall.sh ;;
+    1) bash $SCRIPT_DIR/menu/ssh.sh ;;
+    2) bash $SCRIPT_DIR/menu/vmess.sh ;;
+    3) bash $SCRIPT_DIR/menu/vless.sh ;;
+    4) bash $SCRIPT_DIR/menu/nginx.sh ;;
+    5) bash $SCRIPT_DIR/menu/dropbear.sh ;;
+    6) bash $SCRIPT_DIR/menu/sysinfo.sh ;;
+    7) bash $SCRIPT_DIR/menu/changedomain.sh ;;
+    8) bash $SCRIPT_DIR/menu/uninstall.sh ;;
     0) clear; exit 0 ;;
     *) echo -e "  ${RED}[!] Pilihan tidak valid!${NC}"; sleep 1; main_menu ;;
   esac
