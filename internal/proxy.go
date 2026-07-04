@@ -3,9 +3,16 @@ package internal
 import (
 	"io"
 	"net"
+	"sync"
 	"time"
 
 	"github.com/gorilla/websocket"
+)
+
+const (
+	ReadTimeout  = 300 * time.Second
+	WriteTimeout = 300 * time.Second
+	BufferSize   = 32 * 1024
 )
 
 func Proxy(ws *websocket.Conn, backend string) {
@@ -17,48 +24,58 @@ func Proxy(ws *websocket.Conn, backend string) {
 	)
 
 	if err != nil {
-		ws.Close()
+		_ = ws.Close()
 		return
 	}
 
-	go wsToTCP(ws, tcp)
-	go tcpToWS(tcp, ws)
+	defer tcp.Close()
+	defer ws.Close()
 
-	select {}
+	var wg sync.WaitGroup
+	wg.Add(2)
 
+	go func() {
+		defer wg.Done()
+		copyWSToTCP(ws, tcp)
+	}()
+
+	go func() {
+		defer wg.Done()
+		copyTCPToWS(tcp, ws)
+	}()
+
+	wg.Wait()
 }
 
-func wsToTCP(ws *websocket.Conn, tcp net.Conn) {
-
-	defer ws.Close()
-	defer tcp.Close()
+func copyWSToTCP(ws *websocket.Conn, tcp net.Conn) {
 
 	for {
 
-		_, data, err := ws.ReadMessage()
+		_ = ws.SetReadDeadline(time.Now().Add(ReadTimeout))
+
+		mt, data, err := ws.ReadMessage()
 
 		if err != nil {
 			return
 		}
 
-		_, err = tcp.Write(data)
-
-		if err != nil {
-			return
+		if mt != websocket.BinaryMessage && mt != websocket.TextMessage {
+			continue
 		}
 
+		if _, err := tcp.Write(data); err != nil {
+			return
+		}
 	}
-
 }
 
-func tcpToWS(tcp net.Conn, ws *websocket.Conn) {
+func copyTCPToWS(tcp net.Conn, ws *websocket.Conn) {
 
-	defer ws.Close()
-	defer tcp.Close()
-
-	buf := make([]byte, 32768)
+	buf := make([]byte, BufferSize)
 
 	for {
+
+		_ = tcp.SetReadDeadline(time.Now().Add(ReadTimeout))
 
 		n, err := tcp.Read(buf)
 
@@ -70,15 +87,10 @@ func tcpToWS(tcp net.Conn, ws *websocket.Conn) {
 			return
 		}
 
-		err = ws.WriteMessage(
-			websocket.BinaryMessage,
-			buf[:n],
-		)
+		_ = ws.SetWriteDeadline(time.Now().Add(WriteTimeout))
 
-		if err != nil {
+		if err := ws.WriteMessage(websocket.BinaryMessage, buf[:n]); err != nil {
 			return
 		}
-
 	}
-
 }
