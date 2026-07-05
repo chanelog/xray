@@ -46,7 +46,7 @@ show_header() {
   echo -e "  ${YELLOW}Uptime   ${NC}: ${WHITE}$uptime${NC}"
   echo -e "  ${YELLOW}Network  ${NC}: ${WHITE}$net${NC}"
   echo -e "${CYAN}$LINE${NC}"
-  echo -e "  Xray: $xray_st   Nginx: $nginx_st   Dropbear: $db_st   SSH-WS: $wsp_st   Stunnel4: $stunnel_st"
+  echo -e "  Xray: $xray_st Nginx: $nginx_st Dropbear: $db_st SSH-WS: $wsp_st Stunnel4: $stunnel_st"
   echo -e "${CYAN}$LINE${NC}"
   echo -e "  ${YELLOW}VMess${NC}: ${WHITE}$vmess_count${NC}  ${YELLOW}VLess${NC}: ${WHITE}$vless_count${NC}  ${YELLOW}Trojan${NC}: ${WHITE}$trojan_count${NC}  ${YELLOW}SS${NC}: ${WHITE}$ss_count${NC}  ${YELLOW}SSHWS${NC}: ${WHITE}$ssh_count${NC}"
   echo -e "${CYAN}$LINE${NC}"
