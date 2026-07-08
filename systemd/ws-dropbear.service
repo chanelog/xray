@@ -1,0 +1,14 @@
+[Unit]
+Description=WS-Dropbear proxy (internal, behind Nginx)
+After=network.target dropbear.service
+
+[Service]
+Type=simple
+User=root
+NoNewPrivileges=true
+ExecStart=/usr/bin/python3 /usr/local/bin/ws-dropbear.py 701 127.0.0.1 127.0.0.1:143
+Restart=on-failure
+RestartSec=3
+
+[Install]
+WantedBy=multi-user.target
