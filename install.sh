@@ -923,8 +923,7 @@ install_script_files() {
 
   cat > $SCRIPT_DIR/banner.txt <<'EOF2'
   ╔══════════════════════════════════════╗
-  ║     CHANELOG VPN TUNNEL SERVER       ║
-  ║     Unauthorized access prohibited  ║
+  ║         CHANELOG VPN TUNNEL SERVER          ║
   ╚══════════════════════════════════════╝
 EOF2
 
